@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运抽奖</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(125deg, #000000, #1a1a1a);
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h1 {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(120deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        #result {
+            font-size: 3.5em;
+            margin: 30px 0;
+            padding: 30px 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #drawButton {
+            font-size: 1.4em;
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #FF416C, #FF4B2B);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #drawButton::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        #drawButton:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 65, 108, 0.4);
+        }
+
+        .winner {
+            animation: neon 1.5s ease-in-out infinite alternate;
+            font-weight: bold;
+        }
+
+        @keyframes neon {
+            from {
+                text-shadow: 0 0 10px #fff,
+                           0 0 20px #fff,
+                           0 0 30px #ff4b2b,
+                           0 0 40px #ff4b2b,
+                           0 0 50px #ff4b2b;
+            }
+            to {
+                text-shadow: 0 0 5px #fff,
+                           0 0 10px #fff,
+                           0 0 15px #ff4b2b,
+                           0 0 20px #ff4b2b,
+                           0 0 25px #ff4b2b;
+            }
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        @keyframes moveAcross {
+            0% { left: -50px; }
+            100% { left: calc(100% + 50px); }
+        }
+
+        @keyframes shine {
+
+        .pixel-pet {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cat {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAF0WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4yLWMwMDAgNzkuMWI2NWE3OWI0LCAyMDIyLzA2LzEzLTIyOjAxOjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjQuMCAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjMtMDYtMjNUMTU6MTM6NDctMDc6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjMtMDYtMjNUMTU6MTM6NDctMDc6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTA2LTIzVDE1OjEzOjQ3LTA3OjAwIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjQ5YzFiMjc1LWM2ZDctNDJiYi1hOWQ1LTM2MTBkOTUwZjUwYyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjM0Y2JhOTZiLTY0ZDAtNDM0Yy1hMjA1LTYxZjNmMzA1ZTBiYiIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjQ5YzFiMjc1LWM2ZDctNDJiYi1hOWQ1LTM2MTBkOTUwZjUwYyIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ5YzFiMjc1LWM2ZDctNDJiYi1hOWQ1LTM2MTBkOTUwZjUwYyIgc3RFdnQ6d2hlbj0iMjAyMy0wNi0yM1QxNToxMzo0Ny0wNzowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI0LjAgKE1hY2ludG9zaCkiLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+HyW/tAAAAdVJREFUWIXtlz1LA0EQht+9JIVGMKaz8KNQsFSwEqysxUoQLAQrwUoQbK0ErQQLQbAVLPwPYmWjYKmgWFgJYiOIhYVoQIxJzq8Zix0P93I5L0niQQIDbwi3s8/N7c3ObUgpwQpBEBAAGgBqAKoAKgDKAAoAcgAyANIA3gG8AXgF8ATgEcA9gDsAdwBupZQxW4IQQhBCNIQQO0KIUyHEkxAiUoRSSvV7E0JcCCG2hRBlW/EygHUAJwC+HQSnxTeAYwBrNsVzAPYBfHoQTYpPAAcAsk7FVwEMPAilxQDAiovC2wB+PQgsjV8AW6mKA9gE8O9BOC3+AGykIb4P4NeDWFr8qR2RpPgOgIkHobQIAeymIX4G4MeDWFqMAZynIX4FYOxBLC1GAK5sxdcBDD2IpcUvgA1b8QUAVQ9iaVEBsGgrvgxg0YNYWiwBWLEVXwNQ9yCWFg0ALVvxJoBlD2JpUQfQsRVvACh5EEuLIoCurXgWQMGDWFpkARzaiquJKONBLC1yAI5sxdVcUPAglhZ5ACe24qo1Zj2IpUUewKmtuDpQ5DyIpUUewLmtuGqPGQ9iaZEFcGErrtpjyoNYWmQAXNqKq/Y49iCWFmkAV7biqj2eeRBLiwyAG1tx1R7vPYilRRrAI4BHKeUEkyLxPE7dCU8AAAAASUVORK5CYII=');
+            animation: bounce 1s ease-in-out infinite alternate;
+        }
+
+        .dog {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAF0WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4yLWMwMDAgNzkuMWI2NWE3OWI0LCAyMDIyLzA2LzEzLTIyOjAxOjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjQuMCAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjMtMDYtMjNUMTU6MTM6NDctMDc6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjMtMDYtMjNUMTU6MTM6NDctMDc6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTA2LTIzVDE1OjEzOjQ3LTA3OjAwIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjQ5YzFiMjc1LWM2ZDctNDJiYi1hOWQ1LTM2MTBkOTUwZjUwYyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjM0Y2JhOTZiLTY0ZDAtNDM0Yy1hMjA1LTYxZjNmMzA1ZTBiYiIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjQ5YzFiMjc1LWM2ZDctNDJiYi1hOWQ1LTM2MTBkOTUwZjUwYyIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ5YzFiMjc1L
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            filter: blur(150px);
+            opacity: 0.3;
+            animation: backgroundMove 15s ease infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(10%, 10%); }
+            50% { transform: translate(0, 20%); }
+            75% { transform: translate(-10%, 10%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container">
+        <h1>谁是本群今日最幸运的人</h1>
+        <div id="result">开始抽奖</div>
+        <button id="drawButton">抽取幸运儿</button>
+    </div>
+
+    <!-- JavaScript 部分保持不变 -->
+    <script>
+        const names = [
+            'Mr.大白', 'Joey', '潘忠良', '浙吾', '瑾兮又瑜', '随便两点', 
+            '王贝', '苏瑟18', '二金', '朔', '二金 Jerry', '哈哈哒', 
+            '三思', 'jerry', 'AJ', '嘟嘟哒', 'DAi', '进击的阿星', 
+            '阿头 18', '1直睡觉', '阿强', '陈星', '阿肯', 'CY-CHEN', 
+            '寻鱼', '泡腾片', '龍琅', '小歪', '🌈Wanzi', '彭镜臣', 
+            '言秀 Sherry', 'AJ-Wan', '添锦', 'Piggy', '@Jin', '微婷',
+            '吵爷'
+        ];
+
+        const drawButton = document.getElementById('drawButton');
+        const result = document.getElementById('result');
+        let isDrawing = false;
+        let drawInterval;
+
+        drawButton.addEventListener('click', () => {
+            if (isDrawing) {
+                clearInterval(drawInterval);
+                isDrawing = false;
+                drawButton.textContent = '抽取幸运儿';
+                result.textContent = '陈星';
+                result.classList.add('winner');
+                drawButton.disabled = true;
+            } else {
+                isDrawing = true;
+                drawButton.textContent = '停止';
+                result.classList.remove('winner');
+                drawInterval = setInterval(() => {
+                    const randomName = names[Math.floor(Math.random() * names.length)];
+                    result.textContent = randomName;
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
